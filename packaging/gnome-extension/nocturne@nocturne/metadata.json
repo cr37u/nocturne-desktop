@@ -1,0 +1,8 @@
+{
+  "uuid": "nocturne@nocturne",
+  "name": "Nocturne",
+  "description": "A small Nocturne player in the top bar (artwork, title, previous / play-pause / next). Talks to Nocturne over MPRIS.",
+  "shell-version": ["45", "46", "47", "48", "49"],
+  "version": 1,
+  "url": "https://github.com/cr37u/nocturne-desktop"
+}

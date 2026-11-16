@@ -1,0 +1,19 @@
+{
+    "KPlugin": {
+        "Id": "io.github.nocturne.widget",
+        "Name": "Nocturne",
+        "Name[ro]": "Nocturne",
+        "Name[ru]": "Nocturne",
+        "Description": "Now playing in Nocturne: artwork, title and controls",
+        "Description[ro]": "Se redă acum în Nocturne: copertă, titlu și controale",
+        "Description[ru]": "Сейчас играет в Nocturne: обложка, название и управление",
+        "Icon": "io.github.nocturne",
+        "Category": "Multimedia",
+        "Authors": [{ "Name": "Nocturne contributors" }],
+        "License": "GPL-3.0-or-later",
+        "Version": "1.0.0",
+        "Website": "https://github.com/cr37u/nocturne-desktop"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

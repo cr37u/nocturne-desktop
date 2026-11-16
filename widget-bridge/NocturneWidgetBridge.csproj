@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Windows 11 Widgets board provider for Nocturne (Win+W).
+    Out-of-process COM server; contains NO player logic. It mirrors the state published by the
+    Python app on \\.\pipe\nocturne and forwards widget button presses back to it.
+    Packaged together with the PyInstaller build in one MSIX (see packaging/msix).
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Platforms>x64</Platforms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>NocturneWidgetBridge</AssemblyName>
+    <RootNamespace>Nocturne.WidgetBridge</RootNamespace>
+    <Version>1.0.0</Version>
+    <SelfContained>true</SelfContained>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+
+    <!-- Packaged by our own AppxManifest; depend on the Windows App Runtime framework package. -->
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
+    <WindowsAppSdkBootstrapInitialize>false</WindowsAppSdkBootstrapInitialize>
+    <WindowsAppSdkDeploymentManagerInitialize>false</WindowsAppSdkDeploymentManagerInitialize>
+    <WindowsAppSdkUndockedRegFreeWinRTInitialize>false</WindowsAppSdkUndockedRegFreeWinRTInitialize>
+    <EnableMsixTooling>false</EnableMsixTooling>
+    <UseWinUI>false</UseWinUI>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2957" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\*.json" LogicalName="%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Assets\icon-*.png" LogicalName="%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Assets\btn-*.png" LogicalName="%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Assets\art-placeholder.png" LogicalName="art-placeholder.png" />
+    <EmbeddedResource Include="Assets\widget-gradient.png" LogicalName="widget-gradient.png" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.nocturne</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Nocturne</name>
+  <summary>Download audio from YouTube links and play everything offline</summary>
+  <summary xml:lang="ro">Descarcă audio din linkuri YouTube și redă totul offline</summary>
+  <summary xml:lang="ru">Скачивает звук по ссылкам YouTube и играет всё офлайн</summary>
+  <description>
+    <p>Nocturne is a local music player. Paste a YouTube video or playlist link, Nocturne downloads
+      the best audio stream and keeps everything in your Music folder for offline playback.</p>
+    <ul>
+      <li>Parallel downloads with progress and retries</li>
+      <li>Queue, shuffle, repeat, favorites and playlists</li>
+      <li>Media keys and desktop media widgets (MPRIS)</li>
+      <li>Desktop widget and mini player</li>
+      <li>Română, English, Русский — switch live</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">io.github.nocturne.desktop</launchable>
+  <provides><binary>nocturne</binary></provides>
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="1.0.0" date="2026-11-16" />
+  </releases>
+</component>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Nocturne "full" Windows edition: the PyInstaller app (Nocturne\Nocturne.exe) + the Windows 11
+  Widgets board provider (WidgetBridge\NocturneWidgetBridge.exe, out-of-proc COM server).
+  Placeholders {{...}} are filled by build_msix.ps1.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap uap3 com desktop rescap">
+
+  <Identity
+    Name="Nocturne.MusicPlayer"
+    Publisher="{{PUBLISHER}}"
+    Version="{{VERSION}}"
+    ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>Nocturne</DisplayName>
+    <PublisherDisplayName>Nocturne</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.22000.0" MaxVersionTested="10.0.26200.0" />
+    <PackageDependency
+      Name="{{WINAPPRUNTIME_NAME}}"
+      MinVersion="{{WINAPPRUNTIME_VERSION}}"
+      Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="ro-RO" />
+    <Resource Language="en-US" />
+    <Resource Language="ru-RU" />
+  </Resources>
+
+  <Applications>
+    <Application Id="Nocturne" Executable="Nocturne\Nocturne.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="Nocturne"
+        Description="Player de muzică local: descarcă audio din linkuri YouTube și redă totul offline."
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="Nocturne" />
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#0A0A14" />
+      </uap:VisualElements>
+
+      <Extensions>
+        <!-- nocturne:// (toasts, Widgets board "open app" / commands when the app is not running) -->
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="nocturne">
+            <uap:DisplayName>Nocturne</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
+
+        <!-- "Pornește cu Windows" in packaged mode -->
+        <desktop:Extension Category="windows.startupTask" Executable="Nocturne\Nocturne.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="NocturneStartup" Enabled="false" DisplayName="Nocturne" />
+        </desktop:Extension>
+
+        <!-- Widget provider COM server -->
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:ExeServer Executable="WidgetBridge\NocturneWidgetBridge.exe" Arguments="-RegisterProcessAsComServer" DisplayName="Nocturne Widget Provider">
+              <com:Class Id="924D4929-3BA1-4F76-ABA8-61E9DECD5333" DisplayName="Nocturne Widget Provider" />
+            </com:ExeServer>
+          </com:ComServer>
+        </com:Extension>
+
+        <!-- Windows 11 Widgets board (Win+W) -->
+        <uap3:Extension Category="windows.appExtension">
+          <uap3:AppExtension Name="com.microsoft.windows.widgets" DisplayName="Nocturne" Id="NocturneWidgets" PublicFolder="Public">
+            <uap3:Properties>
+              <WidgetProvider>
+                <ProviderIcons>
+                  <Icon Path="Assets\WidgetIcon.png" />
+                </ProviderIcons>
+                <Activation>
+                  <CreateInstance ClassId="924D4929-3BA1-4F76-ABA8-61E9DECD5333" />
+                </Activation>
+                <Definitions>
+                  <Definition
+                    Id="Nocturne_Player"
+                    DisplayName="Nocturne"
+                    Description="Se redă acum · Now playing · Сейчас играет"
+                    AllowMultiple="false"
+                    IsCustomizable="false">
+                    <Capabilities>
+                      <Capability><Size Name="small" /></Capability>
+                      <Capability><Size Name="medium" /></Capability>
+                      <Capability><Size Name="large" /></Capability>
+                    </Capabilities>
+                    <ThemeResources>
+                      <Icons>
+                        <Icon Path="Assets\WidgetIcon.png" />
+                      </Icons>
+                      <Screenshots>
+                        <Screenshot Path="Assets\WidgetScreenshot.png" DisplayAltText="Nocturne" />
+                      </Screenshots>
+                      <DarkMode />
+                      <LightMode />
+                    </ThemeResources>
+                  </Definition>
+                </Definitions>
+              </WidgetProvider>
+            </uap3:Properties>
+          </uap3:AppExtension>
+        </uap3:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

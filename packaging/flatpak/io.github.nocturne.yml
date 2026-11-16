@@ -1,0 +1,63 @@
+# Optional Flatpak build (local). Uses the KDE runtime for Qt/Wayland/portal integration;
+# PySide6 and yt-dlp come from pip (network access is enabled for the pip step, so this
+# manifest is meant for local builds, not Flathub):
+#
+#   flatpak install flathub org.kde.Platform//6.8 org.kde.Sdk//6.8
+#   flatpak-builder --user --install --force-clean build/flatpak packaging/flatpak/io.github.nocturne.yml
+#   flatpak run io.github.nocturne
+app-id: io.github.nocturne
+runtime: org.kde.Platform
+runtime-version: '6.8'
+sdk: org.kde.Sdk
+command: nocturne
+finish-args:
+  - --share=ipc
+  - --share=network
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --device=dri
+  - --filesystem=xdg-music
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=org.freedesktop.FileManager1
+  - --own-name=org.mpris.MediaPlayer2.nocturne
+  - --env=QT_QPA_PLATFORM=wayland;xcb
+modules:
+  - name: python3.12
+    buildsystem: autotools
+    config-opts:
+      - --enable-shared
+      - --with-ensurepip=install
+      - --enable-optimizations
+    sources:
+      - type: archive
+        url: https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tar.xz
+        sha256: 07ab697474595e06f06647417d3c7fa97ded07afc1a7e4454c5639919b46eaea
+    cleanup:
+      - /share/man
+
+  - name: nocturne
+    buildsystem: simple
+    build-options:
+      build-args:
+        - --share=network
+    build-commands:
+      - python3.12 -m pip install --prefix=/app --no-cache-dir -r requirements.txt
+      - python3.12 -m pip install --prefix=/app --no-cache-dir --no-deps .
+      - QT_QPA_PLATFORM=offscreen python3.12 tools/make_assets.py
+      - python3.12 tools/i18n_tool.py release
+      - python3.12 -m pip install --prefix=/app --no-cache-dir --no-deps --force-reinstall .
+      - install -Dm644 packaging/linux/io.github.nocturne.desktop /app/share/applications/io.github.nocturne.desktop
+      - install -Dm644 packaging/linux/io.github.nocturne.metainfo.xml /app/share/metainfo/io.github.nocturne.metainfo.xml
+      - cp -a packaging/linux/icons /app/share/
+      - mkdir -p /app/share/nocturne && cp -a packaging/plasmoid /app/share/nocturne/
+    sources:
+      - type: dir
+        path: ../..
+        skip:
+          - .venv
+          - .venv-linux
+          - build
+          - dist
+          - widget-bridge

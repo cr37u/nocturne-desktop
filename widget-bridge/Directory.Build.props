@@ -1,0 +1,9 @@
+<Project>
+  <!--
+    Keep NuGet packages next to the repo. The Windows App SDK build targets break when the
+    default cache path (%USERPROFILE%\.nuget\packages) contains an apostrophe, e.g. "John's PC".
+  -->
+  <PropertyGroup>
+    <RestorePackagesPath>$(MSBuildThisFileDirectory)..\build\nuget</RestorePackagesPath>
+  </PropertyGroup>
+</Project>

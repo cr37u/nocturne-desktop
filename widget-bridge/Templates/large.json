@@ -1,0 +1,129 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "Container",
+      "style": "emphasis",
+      "roundedCorners": true,
+      "backgroundImage": { "url": "${gradient}", "fillMode": "cover" },
+      "items": [
+        {
+          "type": "ColumnSet",
+          "columns": [
+            {
+              "type": "Column",
+              "width": "auto",
+              "verticalContentAlignment": "Center",
+              "items": [
+                { "type": "Image", "url": "${artwork}", "width": "72px", "height": "72px", "altText": "${title}" }
+              ]
+            },
+            {
+              "type": "Column",
+              "width": "stretch",
+              "verticalContentAlignment": "Center",
+              "items": [
+                { "type": "TextBlock", "text": "${labelNowPlaying}", "size": "Small", "weight": "Bolder", "color": "Light", "isSubtle": true, "spacing": "None" },
+                { "type": "TextBlock", "text": "${title}", "size": "Large", "weight": "Bolder", "color": "Light", "maxLines": 1, "spacing": "None" },
+                { "type": "TextBlock", "text": "${artist}", "size": "Small", "color": "Light", "isSubtle": true, "maxLines": 1, "spacing": "None" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "spacing": "Large",
+      "columns": [
+        { "type": "Column", "width": "stretch" },
+        {
+          "type": "Column",
+          "width": "auto",
+          "verticalContentAlignment": "Center",
+          "items": [
+            {
+              "type": "Image", "url": "${btnPrev}", "width": "40px", "height": "40px", "altText": "${labelPrev}",
+              "selectAction": { "type": "Action.Execute", "verb": "previous", "tooltip": "${labelPrev}" }
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "auto",
+          "spacing": "Large",
+          "verticalContentAlignment": "Center",
+          "items": [
+            {
+              "type": "Image", "url": "${btnPlayPause}", "width": "52px", "height": "52px", "altText": "${labelPlayPause}",
+              "selectAction": { "type": "Action.Execute", "verb": "play_pause", "tooltip": "${labelPlayPause}" }
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "auto",
+          "spacing": "Large",
+          "verticalContentAlignment": "Center",
+          "items": [
+            {
+              "type": "Image", "url": "${btnNext}", "width": "40px", "height": "40px", "altText": "${labelNext}",
+              "selectAction": { "type": "Action.Execute", "verb": "next", "tooltip": "${labelNext}" }
+            }
+          ]
+        },
+        { "type": "Column", "width": "stretch" }
+      ]
+    },
+    {
+      "type": "TextBlock",
+      "text": "${labelRecent}",
+      "weight": "Bolder",
+      "size": "Small",
+      "isSubtle": true,
+      "separator": true,
+      "spacing": "Large"
+    },
+    {
+      "type": "TextBlock",
+      "$when": "${!hasRecent}",
+      "text": "${labelNoRecent}",
+      "size": "Small",
+      "isSubtle": true
+    },
+    {
+      "type": "ColumnSet",
+      "$data": "${recent}",
+      "spacing": "Small",
+      "columns": [
+        {
+          "type": "Column",
+          "width": "auto",
+          "verticalContentAlignment": "Center",
+          "items": [ { "type": "Image", "url": "${art}", "width": "32px", "height": "32px" } ]
+        },
+        {
+          "type": "Column",
+          "width": "stretch",
+          "verticalContentAlignment": "Center",
+          "items": [ { "type": "TextBlock", "text": "${title}", "weight": "Bolder", "maxLines": 1 } ]
+        },
+        {
+          "type": "Column",
+          "width": "auto",
+          "verticalContentAlignment": "Center",
+          "items": [ { "type": "TextBlock", "text": "${duration}", "size": "Small", "isSubtle": true } ]
+        }
+      ]
+    },
+    {
+      "type": "ActionSet",
+      "spacing": "Large",
+      "actions": [
+        { "type": "Action.Execute", "verb": "open_add_link", "title": "${labelAddLink}", "iconUrl": "${iconPlus}" }
+      ]
+    }
+  ]
+}

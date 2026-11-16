@@ -1,0 +1,19 @@
+.venv/
+.venv-linux/
+__pycache__/
+*.pyc
+build/
+dist/
+widget-bridge/bin/
+widget-bridge/obj/
+*.AppImage
+.flatpak-builder/
+
+# signing material (never commit)
+*.pfx
+*.cer
+*.jks
+
+# local notes and design mock-ups
+PromptNocturneDesktop.txt
+UI/

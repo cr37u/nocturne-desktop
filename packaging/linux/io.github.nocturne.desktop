@@ -1,0 +1,23 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=Nocturne
+GenericName=Music Player
+GenericName[ro]=Player de muzică
+GenericName[ru]=Музыкальный плеер
+Comment=Download audio from YouTube links and play everything offline
+Comment[ro]=Descarcă audio din linkuri YouTube și redă totul offline
+Comment[ru]=Скачивает звук по ссылкам YouTube и играет всё офлайн
+Exec=nocturne %U
+TryExec=nocturne
+Icon=io.github.nocturne
+Terminal=false
+Categories=AudioVideo;Audio;Player;Qt;
+Keywords=music;player;youtube;offline;mp3;audio;
+Keywords[ro]=muzică;player;youtube;offline;audio;
+Keywords[ru]=музыка;плеер;youtube;офлайн;аудио;
+MimeType=x-scheme-handler/nocturne;
+StartupNotify=true
+StartupWMClass=nocturne
+SingleMainWindow=true
+X-GNOME-UsesNotifications=true

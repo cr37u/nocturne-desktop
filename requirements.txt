@@ -1,0 +1,34 @@
+# Runtime dependencies (pinned). Install: python -m pip install -r requirements.txt
+# PySide6-Essentials + PySide6-Addons (QtMultimedia) instead of the full PySide6 metapackage,
+# so WebEngine/Pdf (~300 MB) are never bundled.
+PySide6-Essentials==6.12.0
+PySide6-Addons==6.12.0
+shiboken6==6.12.0
+
+# YouTube: yt-dlp as a library + EJS (JS challenge solver). A JS runtime (deno/node/bun) on PATH
+# is optional but recommended; Nocturne passes js_runtimes to yt-dlp automatically.
+yt-dlp[default]==2026.10.26
+yt-dlp-ejs==0.8.0
+brotli==1.2.1
+certifi==2026.10.23
+mutagen==1.48.1
+pycryptodomex==3.24.2
+requests==2.34.2
+urllib3==2.8.0
+websockets==17.4
+
+# Windows integration (SMTC, toasts, startup task, taskbar)
+comtypes==1.5.0; sys_platform == "win32"
+winrt-runtime==4.1.0; sys_platform == "win32"
+winrt-Windows.ApplicationModel==4!10.0.28000.2957; sys_platform == "win32"
+winrt-Windows.Data.Xml.Dom==4!10.0.28000.2957; sys_platform == "win32"
+winrt-Windows.Foundation==4!10.0.28000.2957; sys_platform == "win32"
+winrt-Windows.Foundation.Collections==4!10.0.28000.2957; sys_platform == "win32"
+winrt-Windows.Media==4!10.0.28000.2957; sys_platform == "win32"
+winrt-Windows.Media.Playback==4!10.0.28000.2957; sys_platform == "win32"
+winrt-Windows.Storage==4!10.0.28000.2957; sys_platform == "win32"
+winrt-Windows.Storage.Streams==4!10.0.28000.2957; sys_platform == "win32"
+winrt-Windows.UI.Notifications==4!10.0.28000.2957; sys_platform == "win32"
+
+# Linux integration (MPRIS2 + notifications over D-Bus)
+jeepney==0.9.0; sys_platform == "linux"

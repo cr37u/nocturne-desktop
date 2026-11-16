@@ -1,0 +1,28 @@
+#!/bin/sh
+# AppImage entry point for Nocturne.
+HERE="$(dirname "$(readlink -f "$0")")"
+
+# Prefer native Wayland, fall back to X11 (both platform plugins are bundled).
+if [ -z "$QT_QPA_PLATFORM" ]; then
+    if [ -n "$WAYLAND_DISPLAY" ]; then
+        export QT_QPA_PLATFORM="wayland;xcb"
+    else
+        export QT_QPA_PLATFORM="xcb"
+    fi
+fi
+
+# Register the desktop entry / nocturne:// handler for this AppImage once (no root needed).
+if [ -n "$APPIMAGE" ] && [ -z "$NOCTURNE_NO_DESKTOP_INTEGRATION" ]; then
+    DATA="${XDG_DATA_HOME:-$HOME/.local/share}"
+    DESKTOP="$DATA/applications/io.github.nocturne.desktop"
+    if [ ! -f "$DESKTOP" ] || ! grep -q "$APPIMAGE" "$DESKTOP" 2>/dev/null; then
+        mkdir -p "$DATA/applications" "$DATA/icons/hicolor/256x256/apps"
+        cp "$HERE/io.github.nocturne.png" "$DATA/icons/hicolor/256x256/apps/io.github.nocturne.png" 2>/dev/null
+        sed -e "s|^Exec=.*|Exec=\"$APPIMAGE\" %U|" -e "/^TryExec=/d" \
+            "$HERE/io.github.nocturne.desktop" > "$DESKTOP"
+        command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database "$DATA/applications" >/dev/null 2>&1
+        command -v xdg-mime >/dev/null 2>&1 && xdg-mime default io.github.nocturne.desktop x-scheme-handler/nocturne >/dev/null 2>&1
+    fi
+fi
+
+exec "$HERE/usr/lib/nocturne/nocturne" "$@"
