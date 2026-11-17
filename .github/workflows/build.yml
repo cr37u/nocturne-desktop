@@ -1,0 +1,85 @@
+name: build
+
+# - When a release is published, the Linux AppImage is built on an old glibc base and attached
+#   to that release (Windows files are built and signed locally with build_windows.ps1 /
+#   build_msix.ps1 and uploaded by hand, like the Android APK).
+# - "Run workflow" builds everything (Windows .exe/.zip/.msix with a test certificate + AppImage)
+#   as downloadable workflow artifacts.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Attach the AppImage to this existing release (e.g. v1.0.2). Leave empty for artifacts only."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    # glibc 2.31 (same as Ubuntu 20.04): the AppImage runs on every current distribution.
+    container:
+      image: python:3.12-bullseye
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build AppImage
+        run: bash packaging/build_linux.sh
+        env:
+          PYTHON: python3.12
+
+      - name: Name like the other release files
+        run: |
+          VERSION=$(python3.12 -c "import sys; sys.path.insert(0, '.'); import nocturne; print(nocturne.__version__)")
+          mv dist/Nocturne-*-x86_64.AppImage "dist/nocturne-desktop-v${VERSION}-x86_64.AppImage"
+          ls -la dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nocturne-desktop-linux
+          path: dist/*.AppImage
+
+      - name: Attach to the release
+        if: github.event_name == 'release' || inputs.release_tag != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name || inputs.release_tag }}
+          files: dist/*.AppImage
+
+  windows:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build .exe installer + portable zip
+        shell: pwsh
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File packaging\build_windows.ps1 -Python "python"
+
+      - name: Build MSIX (test certificate)
+        shell: pwsh
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File packaging\msix\build_msix.ps1 -SkipPyInstaller -TestCert
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nocturne-desktop-windows
+          path: |
+            dist/NocturneSetup-*.exe
+            dist/Nocturne-*-windows-portable.zip
+            dist/Nocturne-*.msix
