@@ -21,9 +21,9 @@ permissions:
 jobs:
   linux:
     runs-on: ubuntu-latest
-    # glibc 2.31 (same as Ubuntu 20.04): the AppImage runs on every current distribution.
+    # glibc 2.35 (PySide6 6.12 needs >= 2.34): the AppImage runs on Ubuntu 22.04+, Debian 12+, Fedora 36+.
     container:
-      image: python:3.12-bullseye
+      image: ubuntu:22.04
       options: --privileged
     steps:
       - uses: actions/checkout@v4

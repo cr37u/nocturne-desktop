@@ -199,7 +199,7 @@ powershell -ExecutionPolicy Bypass -File packaging\msix\build_msix.ps1      # + 
 Build on an old glibc so the result runs everywhere:
 
 ```bash
-docker run --rm -v "$PWD":/src -w /src python:3.12-bullseye bash packaging/build_linux.sh
+docker run --rm -v "$PWD":/src -w /src ubuntu:22.04 bash packaging/build_linux.sh
 ```
 
 KDE widget: `kpackagetool6 -t Plasma/Applet -i packaging/plasmoid/io.github.nocturne.widget`

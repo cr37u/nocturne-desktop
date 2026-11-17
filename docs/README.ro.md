@@ -178,10 +178,10 @@ AppImage-ul trebuie construit pe un **glibc vechi** ca să ruleze pe orice distr
 (Fedora, Ubuntu, Debian, Arch, openSUSE, Mint…). Cel mai simplu, cu Docker:
 
 ```bash
-docker run --rm -v "$PWD":/src -w /src python:3.12-bullseye bash packaging/build_linux.sh
+docker run --rm -v "$PWD":/src -w /src ubuntu:22.04 bash packaging/build_linux.sh
 ```
 
-(`python:3.12-bullseye` = Debian 11, glibc 2.31 — la fel ca Ubuntu 20.04.) Scriptul instalează bibliotecile
+(`ubuntu:22.04` = glibc 2.35, minimul cerut de PySide6 6.12 — merge pe Ubuntu 22.04+, Debian 12+, Fedora 36+.) Scriptul instalează bibliotecile
 Qt necesare, rulează PyInstaller, adaugă `AppRun`, `.desktop`, iconițele și pluginurile Qt **xcb + wayland**
 și pluginul multimedia **FFmpeg**, apoi rulează `appimagetool`.
 
