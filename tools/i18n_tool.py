@@ -143,9 +143,18 @@ def _lrelease() -> list[str]:
     exe = shutil.which("pyside6-lrelease")
     if exe:
         return [exe]
-    candidate = Path(sys.executable).with_name("pyside6-lrelease.exe")
-    if candidate.exists():
-        return [str(candidate)]
+    # The venv is usually not activated (CI, build scripts): look next to its python.
+    for name in ("pyside6-lrelease.exe", "pyside6-lrelease"):
+        candidate = Path(sys.executable).with_name(name)
+        if candidate.exists():
+            return [str(candidate)]
+    # The real lrelease binary shipped inside PySide6 (Linux: Qt/libexec, Windows: package root).
+    import PySide6
+    pkg = Path(PySide6.__file__).parent
+    for candidate in (pkg / "Qt" / "libexec" / "lrelease", pkg / "lrelease.exe", pkg / "lrelease"):
+        if candidate.exists():
+            return [str(candidate)]
+    # Last resort; `-m PySide6.scripts.pyside_tool` breaks on Linux (relative script path).
     return [sys.executable, "-m", "PySide6.scripts.pyside_tool", "lrelease"]
 
 
