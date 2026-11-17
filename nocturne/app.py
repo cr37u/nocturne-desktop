@@ -310,7 +310,7 @@ class Nocturne(QObject):
             self.platform.set_progress(*state)
 
     def _on_batch_finished(self, kind: str, title: str, ok: int, failed: int) -> None:
-        if kind != "playlist":
+        if kind not in ("playlist", "mix"):
             return
         heading = _t("Playlist downloaded")
         body = _t("“%1”: %n song(s) ready to play offline.", ok).replace("%1", title)

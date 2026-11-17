@@ -233,6 +233,14 @@ _S: dict[str, dict[str, object]] = {
         "ro": "Linkul nu a putut fi citit. Verifică conexiunea și încearcă din nou.",
         "ru": "Не удалось прочитать ссылку. Проверьте подключение и попробуйте снова.",
     },
+    "This playlist or video is private or unavailable on YouTube.": {
+        "ro": "Acest playlist sau videoclip este privat sau indisponibil pe YouTube.",
+        "ru": "Этот плейлист или видео закрыт или недоступен на YouTube.",
+    },
+    "YouTube requires signing in for this video, so it can't be downloaded.": {
+        "ro": "YouTube cere autentificare pentru acest videoclip, așa că nu poate fi descărcat.",
+        "ru": "YouTube требует входа в аккаунт для этого видео, поэтому его нельзя скачать.",
+    },
     "No playable videos were found at this link.": {
         "ro": "Nu s-au găsit videoclipuri redabile la acest link.",
         "ru": "По этой ссылке нет доступных видео.",

@@ -90,7 +90,7 @@ ColumnLayout {
                 radius: 18
                 Icon {
                     anchors.centerIn: parent
-                    name: root.hasDetected && root.detected.kind === "playlist" ? "playlists" : "music"
+                    name: root.hasDetected && root.detected.kind !== "video" ? "playlists" : "music"
                     size: 30
                 }
             }
@@ -98,7 +98,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 4
                 Text {
-                    text: root.hasDetected && root.detected.kind === "playlist" ? qsTr("PLAYLIST DETECTED") : qsTr("VIDEO DETECTED")
+                    text: root.hasDetected && root.detected.kind !== "video" ? qsTr("PLAYLIST DETECTED") : qsTr("VIDEO DETECTED")
                     color: Theme.amber
                     font.pixelSize: 11
                     font.weight: Font.ExtraBold

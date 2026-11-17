@@ -281,10 +281,14 @@ class DownloadManager(QObject):
                 "logger": _ydl_logger(),
                 "socket_timeout": 20,
             }
+            is_list = link.kind in ("playlist", "mix")
+            if link.kind == "mix":
+                opts["noplaylist"] = False
+                opts["playlistend"] = 50  # Mixes are endless radios: take the first 50
             with yt_dlp.YoutubeDL(opts) as ydl:
-                info = ydl.extract_info(link.url, download=False, process=link.kind == "playlist")
+                info = ydl.extract_info(link.url, download=False, process=is_list)
             entries: list[dict[str, Any]] = []
-            if link.kind == "playlist":
+            if is_list:
                 for e in info.get("entries") or []:
                     if not e or not e.get("id") or len(str(e.get("id"))) != 11:
                         continue
@@ -332,7 +336,13 @@ class DownloadManager(QObject):
         self._analyzing = max(0, self._analyzing - 1)
         self.analyzingChanged.emit()
         if payload is None:
-            self.message.emit(_t("Could not read this link. Check your connection and try again."), True)
+            text = (error or "").lower()
+            if "unviewable" in text or "private" in text or "does not exist" in text or "unavailable" in text:
+                self.message.emit(_t("This playlist or video is private or unavailable on YouTube."), True)
+            elif "sign in" in text or "age" in text and "confirm" in text:
+                self.message.emit(_t("YouTube requires signing in for this video, so it can't be downloaded."), True)
+            else:
+                self.message.emit(_t("Could not read this link. Check your connection and try again."), True)
             return
         if not payload["entries"]:
             self.message.emit(_t("No playable videos were found at this link."), True)
@@ -365,7 +375,7 @@ class DownloadManager(QObject):
     def _enqueue(self, payload: dict[str, Any]) -> None:
         existing_ids = set(payload.get("existingIds") or [])
         playlist_local_id: int | None = None
-        if payload["kind"] == "playlist":
+        if payload["kind"] in ("playlist", "mix"):
             pl = self._db.playlist_by_source(payload["sourceId"])
             playlist_local_id = pl.id if pl else self._db.create_playlist(payload["title"], payload["sourceId"])
             if pl is None:

@@ -133,6 +133,14 @@
       <source>This is not a valid YouTube link.</source>
       <translation>Acesta nu este un link YouTube valid.</translation>
     </message>
+    <message>
+      <source>This playlist or video is private or unavailable on YouTube.</source>
+      <translation>Acest playlist sau videoclip este privat sau indisponibil pe YouTube.</translation>
+    </message>
+    <message>
+      <source>YouTube requires signing in for this video, so it can't be downloaded.</source>
+      <translation>YouTube cere autentificare pentru acest videoclip, așa că nu poate fi descărcat.</translation>
+    </message>
   </context>
   <context>
     <name>DownloadsCard</name>

@@ -131,6 +131,14 @@
       <source>This is not a valid YouTube link.</source>
       <translation>This is not a valid YouTube link.</translation>
     </message>
+    <message>
+      <source>This playlist or video is private or unavailable on YouTube.</source>
+      <translation>This playlist or video is private or unavailable on YouTube.</translation>
+    </message>
+    <message>
+      <source>YouTube requires signing in for this video, so it can't be downloaded.</source>
+      <translation>YouTube requires signing in for this video, so it can't be downloaded.</translation>
+    </message>
   </context>
   <context>
     <name>DownloadsCard</name>

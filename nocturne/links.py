@@ -23,7 +23,7 @@ _AUTO_LIST_PREFIXES = ("RD", "UL", "LL", "WL")
 
 @dataclass(frozen=True, slots=True)
 class YouTubeLink:
-    kind: str  # "video" | "playlist"
+    kind: str  # "video" | "playlist" | "mix"
     id: str
     url: str
 
@@ -57,6 +57,12 @@ def parse(text: str) -> YouTubeLink | None:
             video_id = parts[1]
 
     list_id = (query.get("list") or [None])[0]
+    if list_id and list_id.startswith("RD"):
+        # YouTube Mix / radio: only viewable through a watch URL. The seed video is either in
+        # the link or encoded in the list id (RD<id>, RDAMVM<id>, RDMM<id>…).
+        seed = video_id if video_id and _VIDEO_ID.match(video_id) else list_id[-11:]
+        if _VIDEO_ID.match(seed):
+            return YouTubeLink("mix", list_id, f"https://www.youtube.com/watch?v={seed}&list={list_id}")
     if list_id and not (video_id and list_id.startswith(_AUTO_LIST_PREFIXES)):
         return YouTubeLink("playlist", list_id, f"https://www.youtube.com/playlist?list={list_id}")
     if video_id and _VIDEO_ID.match(video_id):
